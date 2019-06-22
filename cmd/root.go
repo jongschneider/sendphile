@@ -30,7 +30,7 @@ var rootCmd = &cobra.Command{
 	Short: "Sendphile is an easy way to send sensitive data to someone.",
 	Long: `Sendphile is a CLI tool built with Golang. 
 
-Sendphile makes it easy to encrypt a file, send the file, and send the encrytion key to a third party via separate channels.`,
+Sendphile makes it easy to encrypt a file, send the file, and send the encryption key to a third party via separate channels.`,
 }
 
 // Potentially wan to initialize a client or two for sending email.
