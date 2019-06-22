@@ -35,6 +35,10 @@ Sendphile makes it easy to encrypt a file, send the file, and send the encryptio
 
 // Potentially wan to initialize a client or two for sending email.
 func init() {
+	// file = *encryptCmd.Flags().StringP("file", "f", "", "the filename to encrypt")
+	// key = *encryptCmd.Flags().StringP("key", "k", "", "the key used to encrypt and decrypt the file")
+	rootCmd.AddCommand(encryptCmd)
+
 	// inititalize email client
 
 	// initialize text client

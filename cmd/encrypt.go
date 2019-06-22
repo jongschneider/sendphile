@@ -21,7 +21,6 @@ import (
 	"crypto/md5"
 	"crypto/rand"
 	"encoding/hex"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -33,7 +32,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var passphrase = "abc"
+var key *string
+var file *string
 
 // encryptCmd represents the encrypt command
 var encryptCmd = &cobra.Command{
@@ -45,40 +45,36 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
-			// fmt.Println(`ERROR:
-			// sendphile encrypt requires 1 argument - the path to a file you wish to encrpty.`)
-			return errors.New("sendphile encrypt requires 1 argument - the path to a file you wish to encrypt")
-		}
-
-		in := args[0]
-
-		data, err := ioutil.ReadFile(in)
+	// Args: cobra.ExactArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) (err error) {
+		fmt.Println("file:", *file)
+		fmt.Println("key:", *key)
+		data, err := ioutil.ReadFile(*file)
 		if err != nil {
 			return err
 		}
 
-		b := encrypt(data, passphrase)
+		b := encrypt(data, *key)
 
-		out, err := createDstFilepath(in)
+		out, err := createDstFilepath(*file)
 		if err != nil {
 			return err
 		}
-		fmt.Println(out)
+
 		err = ioutil.WriteFile(out, b, 0644)
 		if err != nil {
 			return err
 		}
 
-		fmt.Printf("contents of %s were encrypted and stored in %s\n", in, out)
+		fmt.Printf("contents of %s were encrypted and stored in %s\n", *file, out)
 		return nil
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(encryptCmd)
-
+	// rootCmd.AddCommand(encryptCmd)
+	file = encryptCmd.Flags().StringP("file", "f", "", "the filename to encrypt")
+	key = encryptCmd.Flags().StringP("key", "k", "", "the key used to encrypt and decrypt the file")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
